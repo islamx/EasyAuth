@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "packages": {
+    "node": "22",
+    "pnpm": "9"
+  },
+  "steps": {
+    "install": {
+      "commands": ["pnpm install --frozen-lockfile"]
+    },
+    "build": {
+      "commands": [
+        "pnpm --filter @easyauth/shared build",
+        "pnpm --filter @easyauth/api build"
+      ]
+    }
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter @easyauth/api start:prod"
+  }
+}
