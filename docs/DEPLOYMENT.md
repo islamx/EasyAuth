@@ -62,8 +62,11 @@ CORS_ORIGIN=https://yourdomain.com  # your frontend URL
 #### Platform-Specific Notes
 
 - **Docker**: Use the repo root `Dockerfile` (build context = repo root). The image uses **pnpm** and the monorepo layout; do not use a build that only copies `apps/api` and runs `npm install`, or you'll get `Unsupported URL Type "workspace:"`. Build: `docker build -t easyauth-api .` — run with env vars for `MONGO_URI`, `JWT_SECRET`, etc.
-- **Railway (API only; do not deploy the web app here)**: Use the **repo root** as the service root (do not set root to `apps/api`). Prefer **Dockerfile** as the builder (see `railpack.json`: `"provider": "dockerfile"`) so the repo’s pnpm-based Dockerfile is used. If using Nixpacks, the root `nixpacks.toml` and `packageManager` in root `package.json` ensure pnpm is used. Build: leave default or set to `pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`. Start: **must** set to `pnpm --filter @easyauth/api start:prod` (root has no `start` script).
-- **Render**: Create a new service, connect your GitHub repo, set environment variables. Use repo root and pnpm build/start commands as above.
+- **Railway (API only; do not deploy the web app here)**:
+  - **Root Directory**: Must be the **repository root** (leave blank or `.`). If you set root to `apps/api`, Nixpacks will not see the root `nixpacks.toml` and will run `npm i` → you will get `EUNSUPPORTEDPROTOCOL` / `Unsupported URL Type "workspace:"`.
+  - **Builder**: Prefer the repo **Dockerfile** so the pnpm-based build is used (see `railpack.json`: `"provider": "dockerfile"`). In Railway: Service → Settings → set **Builder** to **Dockerfile** if available.
+  - **If using Nixpacks**: With root at repo root, the root `nixpacks.toml` is used (pnpm install/build/start). Build: leave default or set to `pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`. Start: **must** set to `pnpm --filter @easyauth/api start:prod` (root has no `start` script).
+- **Render**: Create a new service, connect your GitHub repo, set environment variables. Use **repo root**. Build command must install devDependencies (Nest CLI is needed for `nest build`): use **`NODE_ENV=development pnpm install && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`**. Start: **`pnpm --filter @easyauth/api start:prod`**. (Render sets NODE_ENV=production at build time, so without NODE_ENV=development for install you get "nest: not found".)
 - **Heroku**: Use the Node.js buildpack, set workspace root to `apps/api` if needed
 - **AWS/GCP**: Use Elastic Beanstalk, App Engine, or containerize with Docker
 
@@ -101,7 +104,12 @@ NEXT_PUBLIC_API_URL=https://your-api-domain.com/api
 
 #### Platform-Specific Notes
 
-- **Vercel (Recommended)**: Deploy with one click. Vercel auto-detects Next.js and handles builds. Set `NEXT_PUBLIC_API_URL` in project settings.
+- **Vercel (Recommended)**:
+  1. In Vercel project settings, set **Root Directory** to **`apps/web`** (so Next.js is detected).
+  2. **Build Command**: `pnpm --filter @easyauth/shared build && pnpm run build` (or leave empty to use root `vercel.json` if you deploy from repo root).
+  3. **Install Command**: `pnpm install` (pnpm will use the workspace from repo root).
+  4. Add env var `NEXT_PUBLIC_API_URL=https://your-api-domain.com/api`.
+  5. If you use **Root Directory = .** (repo root) instead, the repo root `vercel.json` already sets install/build; ensure Framework is **Next.js** and that the app in `apps/web` is detected.
 - **Netlify**: Use the Next.js plugin. Set build command and environment variables in site settings.
 - **AWS Amplify**: Connect your repo, configure build settings, and set environment variables.
 
@@ -144,7 +152,9 @@ After deployment, test the following:
 
 | Issue | Solution |
 |-------|----------|
-| `EUNSUPPORTEDPROTOCOL` / `Unsupported URL Type "workspace:"` | The build is using **npm**; this monorepo requires **pnpm**. Set the service **root to the repository root** (not `apps/api`). Use the repo **Dockerfile** as the builder when possible (Railway: ensure Dockerfile is selected). Root `nixpacks.toml` overrides install to use pnpm only when the build runs from repo root. |
+| **"Using Nixpacks"** and install step runs **`npm i`** (then `EUNSUPPORTEDPROTOCOL`) | Nixpacks is not seeing the repo root `nixpacks.toml`. Set **Root Directory** to the repo root (blank or `.`). Or switch the builder to **Dockerfile** so the repo’s pnpm Dockerfile is used. |
+| `EUNSUPPORTEDPROTOCOL` / `Unsupported URL Type "workspace:"` | The build is using **npm**; this monorepo requires **pnpm**. **Fix:** Set the service **Root Directory** to the repository root (leave blank or `.`; do not use `apps/api`). Then either use the repo **Dockerfile** as the builder (Railway: Settings → Builder → Dockerfile), or ensure Nixpacks runs from repo root so it picks up `nixpacks.toml` and uses pnpm. |
+| **`nest: not found`** (e.g. on Render) | The platform sets NODE_ENV=production during build, so pnpm skips devDependencies and the Nest CLI is not installed. Use build command **`NODE_ENV=development pnpm install && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`**. |
 | `FATAL: JWT_SECRET is set to an insecure placeholder value` | Generate a new secret with the command in step 1 and set it in your API environment variables |
 | Cookie not being sent to API | Ensure `CORS_ORIGIN` matches your frontend URL exactly (including protocol and port) |
 | `secure` cookie warning | Deploy both API and web over HTTPS (not HTTP) |

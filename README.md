@@ -88,7 +88,32 @@ This starts both the API (port 4000) and web app (port 3000) concurrently.
 
 Interactive documentation available at **http://localhost:4000/api/docs** (Swagger, disabled in production).
 
-**Endpoints**: `GET /api/health`, `POST /api/auth/signup`, `POST /api/auth/signin`, `POST /api/auth/logout`, `GET /api/auth/me`, `GET /api/auth/protected`
+**Base URL (production):** `https://easyauth-hixc.onrender.com`
+
+### Test with Hoppscotch
+
+You can try all endpoints in one click using [Hoppscotch](https://hoppscotch.io). Open the link for each endpoint (pre-filled method and URL for production API):
+
+| Endpoint | Method | Hoppscotch link |
+| -------- | ------ | ---------------- |
+| Health check | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/health) |
+| Sign up | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/signup) |
+| Sign in | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/signin) |
+| Logout | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/logout) |
+| Current user (protected) | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/auth/me) |
+| Protected route (protected) | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/auth/protected) |
+
+**Notes:**
+
+- **POST Sign up:** In Hoppscotch, set **Body** → **JSON** to:
+  ```json
+  { "email": "user@example.com", "name": "John Doe", "password": "Password123!" }
+  ```
+- **POST Sign in:** Set **Body** → **JSON** to:
+  ```json
+  { "email": "user@example.com", "password": "Password123!" }
+  ```
+- **Protected endpoints** (`/api/auth/me`, `/api/auth/protected`): After sign in, the API sets an `easyauth_token` cookie. In Hoppscotch, enable **Send cookies** (or use the same browser session) so the request includes the cookie.
 
 Full request/response examples: [docs/API.md](docs/API.md)
 
