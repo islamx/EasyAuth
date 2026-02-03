@@ -59,7 +59,8 @@ CORS_ORIGIN=https://yourdomain.com  # your frontend URL
 
 #### Platform-Specific Notes
 
-- **Railway/Render**: Create a new service, connect your GitHub repo, set environment variables, and deploy
+- **Docker**: Use the repo root `Dockerfile` (build context = repo root). The image uses **pnpm** and the monorepo layout; do not use a build that only copies `apps/api` and runs `npm install`, or you'll get `Unsupported URL Type "workspace:"`. Build: `docker build -t easyauth-api .` — run with env vars for `MONGO_URI`, `JWT_SECRET`, etc.
+- **Railway/Render**: Create a new service, connect your GitHub repo, set environment variables, and deploy. If the platform uses Docker, use the repo Dockerfile; otherwise use the pnpm build command above.
 - **Heroku**: Use the Node.js buildpack, set workspace root to `apps/api` if needed
 - **AWS/GCP**: Use Elastic Beanstalk, App Engine, or containerize with Docker
 
