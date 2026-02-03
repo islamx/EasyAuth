@@ -39,6 +39,8 @@ Ensure your MongoDB instance is:
 
 ### 3. Deploy the API
 
+**Note:** Deploy only the API to Railway (or Docker/Render). The web app is deployed separately (e.g. Vercel); see section 4.
+
 #### Environment Variables (Required)
 
 Set these on your API hosting platform:
@@ -60,7 +62,7 @@ CORS_ORIGIN=https://yourdomain.com  # your frontend URL
 #### Platform-Specific Notes
 
 - **Docker**: Use the repo root `Dockerfile` (build context = repo root). The image uses **pnpm** and the monorepo layout; do not use a build that only copies `apps/api` and runs `npm install`, or you'll get `Unsupported URL Type "workspace:"`. Build: `docker build -t easyauth-api .` — run with env vars for `MONGO_URI`, `JWT_SECRET`, etc.
-- **Railway**: Use the **repo root** as the service root (do not set root to `apps/api`). Root `package.json` has `packageManager: "pnpm@9.15.0"` so Railpack will use pnpm. Build: leave default (`pnpm run build`) or set to `pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`. Start: **must** set to `pnpm --filter @easyauth/api start:prod` (root has no `start` script).
+- **Railway (API only; do not deploy the web app here)**: Use the **repo root** as the service root (do not set root to `apps/api`). Prefer **Dockerfile** as the builder (see `railpack.json`: `"provider": "dockerfile"`) so the repo’s pnpm-based Dockerfile is used. If using Nixpacks, the root `nixpacks.toml` and `packageManager` in root `package.json` ensure pnpm is used. Build: leave default or set to `pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`. Start: **must** set to `pnpm --filter @easyauth/api start:prod` (root has no `start` script).
 - **Render**: Create a new service, connect your GitHub repo, set environment variables. Use repo root and pnpm build/start commands as above.
 - **Heroku**: Use the Node.js buildpack, set workspace root to `apps/api` if needed
 - **AWS/GCP**: Use Elastic Beanstalk, App Engine, or containerize with Docker
@@ -142,6 +144,7 @@ After deployment, test the following:
 
 | Issue | Solution |
 |-------|----------|
+| `EUNSUPPORTEDPROTOCOL` / `Unsupported URL Type "workspace:"` | The build is using **npm**; this monorepo requires **pnpm**. Set the service **root to the repository root** (not `apps/api`). Use the repo **Dockerfile** as the builder when possible (Railway: ensure Dockerfile is selected). Root `nixpacks.toml` overrides install to use pnpm only when the build runs from repo root. |
 | `FATAL: JWT_SECRET is set to an insecure placeholder value` | Generate a new secret with the command in step 1 and set it in your API environment variables |
 | Cookie not being sent to API | Ensure `CORS_ORIGIN` matches your frontend URL exactly (including protocol and port) |
 | `secure` cookie warning | Deploy both API and web over HTTPS (not HTTP) |

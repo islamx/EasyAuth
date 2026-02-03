@@ -1,7 +1,11 @@
+# Monorepo uses pnpm and workspace:* — npm is not supported. Build root must be repo root.
 [phases.setup]
-nixPkgs = ["nodejs_20", "pnpm"]
+nixPkgs = ["nodejs_20"]
+# Use Corepack so pnpm version from package.json is used (avoids npm being selected)
+cmds = ["corepack enable", "corepack prepare pnpm@9.15.0 --activate"]
 
 [phases.install]
+# Override default npm install — required because workspace:* is pnpm-only
 cmds = ["pnpm install --frozen-lockfile"]
 
 [phases.build]
