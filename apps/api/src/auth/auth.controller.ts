@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Res, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get, Body, Res, UseGuards, Req, HttpCode } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
@@ -36,6 +36,7 @@ export class AuthController {
   }
 
   @Post('signin')
+  @HttpCode(200)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({ summary: 'Sign in a user' })
   @ApiResponse({ status: 200, description: 'User signed in successfully' })
@@ -55,6 +56,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @HttpCode(200)
   @ApiOperation({ summary: 'Logout a user' })
   @ApiResponse({ status: 200, description: 'User logged out successfully' })
   async logout(@Res({ passthrough: true }) response: Response) {

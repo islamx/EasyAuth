@@ -4,8 +4,8 @@ A production-ready authentication system built with Next.js 14 (App Router) and 
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS, React Hook Form, Zod
-- **Backend**: NestJS, Mongoose, JWT, bcrypt, Passport
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript 5.7, Tailwind CSS, React Hook Form, Zod
+- **Backend**: NestJS 11, Mongoose, JWT, bcrypt, Passport
 - **Database**: MongoDB
 - **Monorepo**: pnpm workspaces
 - **Testing**: Jest, Supertest, mongodb-memory-server
