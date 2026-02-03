@@ -1,0 +1,23 @@
+{
+  "name": "easyauth",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @easyauth/shared build && concurrently -n api,web -c blue,green \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "pnpm --filter @easyauth/api start:dev",
+    "dev:web": "pnpm --filter @easyauth/web dev",
+    "mongo": "docker compose up -d",
+    "build": "pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build && pnpm --filter @easyauth/web build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @easyauth/api test",
+    "test:e2e": "pnpm --filter @easyauth/api test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
