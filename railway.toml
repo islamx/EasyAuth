@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build"
+
+[deploy]
+startCommand = "pnpm --filter @easyauth/api start:prod"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
