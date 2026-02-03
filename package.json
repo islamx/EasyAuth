@@ -1,6 +1,7 @@
 {
   "name": "easyauth",
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "pnpm --filter @easyauth/shared build && concurrently -n api,web -c blue,green \"pnpm dev:api\" \"pnpm dev:web\"",
     "dev:api": "pnpm --filter @easyauth/api start:dev",
