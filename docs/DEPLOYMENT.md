@@ -105,11 +105,9 @@ NEXT_PUBLIC_API_URL=https://your-api-domain.com/api
 #### Platform-Specific Notes
 
 - **Vercel (Recommended)**:
-  1. In Vercel project settings, set **Root Directory** to **`apps/web`** (so Next.js is detected).
-  2. **Build Command**: `pnpm --filter @easyauth/shared build && pnpm run build` (or leave empty to use root `vercel.json` if you deploy from repo root).
-  3. **Install Command**: `pnpm install` (pnpm will use the workspace from repo root).
-  4. Add env var `NEXT_PUBLIC_API_URL=https://your-api-domain.com/api`.
-  5. If you use **Root Directory = .** (repo root) instead, the repo root `vercel.json` already sets install/build; ensure Framework is **Next.js** and that the app in `apps/web` is detected.
+  1. In Vercel project settings, set **Root Directory** to **`apps/web`** (required so Vercel finds the `package.json` that has `next`).
+  2. Leave **Build Command** and **Install Command** empty so `apps/web/vercel.json` is used: install `pnpm install`, build `pnpm --filter @easyauth/shared build && pnpm run build`.
+  3. Add env var `NEXT_PUBLIC_API_URL=https://your-api-domain.com/api`.
 - **Netlify**: Use the Next.js plugin. Set build command and environment variables in site settings.
 - **AWS Amplify**: Connect your repo, configure build settings, and set environment variables.
 
@@ -133,7 +131,7 @@ After deployment, test the following:
 
 - **JWT_SECRET**: Never commit to version control. Use platform environment variables or secrets management.
 - **HTTPS Only**: The `secure` cookie flag requires HTTPS. Ensure both API and web app are served over HTTPS.
-- **CORS_ORIGIN**: Set to your exact frontend domain. For multiple domains, you'll need to modify the API to accept an array.
+- **CORS_ORIGIN**: Set to your exact frontend domain. Multiple origins are supported as a comma-separated list (e.g. `http://localhost:3000,https://your-app.vercel.app`). Do not use a trailing slash.
 - **MongoDB**: Use strong credentials and restrict IP access.
 - **Rate Limiting**: Currently only `/api/auth/signin` is rate-limited. Consider adding global rate limiting in production.
 - **Monitoring**: Set up logging and error tracking (e.g., Sentry, Datadog, LogRocket).

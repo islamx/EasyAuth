@@ -49,9 +49,15 @@ async function bootstrap() {
   // Security
   app.use(helmet());
 
-  // CORS
+  // CORS: allow single origin or comma-separated list (e.g. http://localhost:3000,https://yourapp.vercel.app)
+  // Trailing slashes are stripped so browser origin (no slash) matches env value
+  const corsOrigin = configService.get('CORS_ORIGIN') ?? '';
+  const origins = corsOrigin
+    .split(',')
+    .map((o: string) => o.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
   app.enableCors({
-    origin: configService.get('CORS_ORIGIN'),
+    origin: origins.length > 1 ? origins : origins[0] || 'http://localhost:3000',
     credentials: true,
   });
 
