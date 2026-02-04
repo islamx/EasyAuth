@@ -112,7 +112,6 @@ curl -s https://easyauth-hixc.onrender.com/api/health
 - CORS is enabled for:
   - `http://localhost:3000`
   - `https://easyauth-generator.vercel.app`
-  - `https://hoppscotch.io`
 - When using browser-based API tools, non-browser or proxy mode may be required due to CORS.
 
 Full request/response examples: [docs/API.md](docs/API.md)
