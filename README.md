@@ -98,13 +98,15 @@ curl -s https://easyauth-hixc.onrender.com/api/health
 
 ### Authentication endpoints
 
-| Method | Path |
-| ------ | ---- |
-| POST   | `/api/auth/signup`   |
-| POST   | `/api/auth/signin`   |
-| POST   | `/api/auth/logout`   |
-| GET    | `/api/auth/me`       |
-| GET    | `/api/auth/protected` |
+| Method | Path | Auth required |
+| ------ | ---- | ------------- |
+| POST   | `/api/auth/signup`   | No  |
+| POST   | `/api/auth/signin`   | No  |
+| POST   | `/api/auth/logout`   | No  |
+| GET    | `/api/auth/me`       | **Yes** (JWT) |
+| GET    | `/api/auth/protected` | **Yes** (JWT) |
+
+**Protected routes:** `GET /api/auth/me` and `GET /api/auth/protected` require a valid JWT (httpOnly cookie); unauthenticated requests return 401. On the web app, `/app` and `/app/*` are protected (the page calls `/auth/me` and redirects to `/signin` on 401).
 
 ### Notes
 
