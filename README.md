@@ -84,36 +84,36 @@ This starts both the API (port 4000) and web app (port 3000) concurrently.
 | `pnpm test:e2e`   | Run E2E tests with mongodb-memory-server        |
 | `pnpm format`     | Format code with Prettier                       |
 
-## API
+## Live API & Testing
 
-Interactive documentation available at **http://localhost:4000/api/docs** (Swagger, disabled in production).
+**Base API URL:** `https://easyauth-hixc.onrender.com`
 
-**Base URL (production):** `https://easyauth-hixc.onrender.com`
+### Health check
 
-### Test with Hoppscotch
+- **Method & path:** `GET /api/health`
 
-You can try all endpoints in one click using [Hoppscotch](https://hoppscotch.io). Open the link for each endpoint (pre-filled method and URL for production API):
+```bash
+curl -s https://easyauth-hixc.onrender.com/api/health
+```
 
-| Endpoint | Method | Hoppscotch link |
-| -------- | ------ | ---------------- |
-| Health check | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/health) |
-| Sign up | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/signup) |
-| Sign in | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/signin) |
-| Logout | POST | [Open in Hoppscotch](https://hoppscotch.io/?method=POST&url=https://easyauth-hixc.onrender.com/api/auth/logout) |
-| Current user (protected) | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/auth/me) |
-| Protected route (protected) | GET | [Open in Hoppscotch](https://hoppscotch.io/?method=GET&url=https://easyauth-hixc.onrender.com/api/auth/protected) |
+### Authentication endpoints
 
-**Notes:**
+| Method | Path |
+| ------ | ---- |
+| POST   | `/api/auth/signup`   |
+| POST   | `/api/auth/signin`   |
+| POST   | `/api/auth/logout`   |
+| GET    | `/api/auth/me`       |
+| GET    | `/api/auth/protected` |
 
-- **POST Sign up:** In Hoppscotch, set **Body** → **JSON** to:
-  ```json
-  { "email": "user@example.com", "name": "John Doe", "password": "Password123!" }
-  ```
-- **POST Sign in:** Set **Body** → **JSON** to:
-  ```json
-  { "email": "user@example.com", "password": "Password123!" }
-  ```
-- **Protected endpoints** (`/api/auth/me`, `/api/auth/protected`): After sign in, the API sets an `easyauth_token` cookie. In Hoppscotch, enable **Send cookies** (or use the same browser session) so the request includes the cookie.
+### Notes
+
+- The API is deployed on **Render**.
+- CORS is enabled for:
+  - `http://localhost:3000`
+  - `https://easyauth-generator.vercel.app`
+  - `https://hoppscotch.io`
+- When using browser-based API tools, non-browser or proxy mode may be required due to CORS.
 
 Full request/response examples: [docs/API.md](docs/API.md)
 
@@ -191,7 +191,3 @@ Full deployment checklist, platform notes, and troubleshooting: [docs/DEPLOYMENT
 ## License
 
 MIT
-
-## Contributing
-
-Contributions welcome! Please open an issue or submit a PR.
