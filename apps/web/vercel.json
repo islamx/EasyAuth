@@ -1,4 +1,4 @@
 {
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter @easyauth/shared build && pnpm run build"
+  "installCommand": "cd ../.. && pnpm install",
+  "buildCommand": "cd ../.. && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/web build"
 }
