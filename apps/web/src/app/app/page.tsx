@@ -19,14 +19,15 @@ export default function AppPage() {
         const response = await api<{ user: User }>('/auth/me');
         setUser(response.user);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        router.replace('/signin');
+        return;
       } finally {
         setLoading(false);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {

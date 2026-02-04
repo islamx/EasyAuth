@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,6 +14,12 @@ import Link from 'next/link';
 export default function SignupPage() {
   const router = useRouter();
   const [serverError, setServerError] = useState<string>('');
+
+  useEffect(() => {
+    api<AuthResponse>('/auth/me')
+      .then(() => router.replace('/app'))
+      .catch(() => {});
+  }, [router]);
 
   const {
     register,

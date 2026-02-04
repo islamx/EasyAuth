@@ -5,13 +5,11 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('easyauth_token');
   const { pathname } = request.nextUrl;
 
-  const isAppRoute = pathname.startsWith('/app');
   const isAuthRoute = pathname === '/signin' || pathname === '/signup';
 
-  if (isAppRoute && !token) {
-    return NextResponse.redirect(new URL('/signin', request.url));
-  }
-
+  // Only redirect to /app when we have the cookie (same-origin). Cross-origin (e.g. Vercel + Render)
+  // stores the cookie on the API domain, so it won't be in request.cookies here; /app page will
+  // call /auth/me and redirect to signin if 401.
   if (isAuthRoute && token) {
     return NextResponse.redirect(new URL('/app', request.url));
   }
