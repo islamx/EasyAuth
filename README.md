@@ -86,7 +86,7 @@ This starts both the API (port 4000) and web app (port 3000) concurrently.
 
 ## Live API & Testing
 
-**Base API URL:** [https://easyauth-hixc.onrender.com](https://easyauth-hixc.onrender.com) (API hosted on [Render](https://render.com))
+**Base API URL:** [https://easyauth-hixc.onrender.com](https://easyauth-hixc.onrender.com) — API hosted on [Render](https://render.com)
 
 ### Health check
 
@@ -113,7 +113,7 @@ curl -s https://easyauth-hixc.onrender.com/api/health
 - The API is deployed on [Render](https://render.com); the web app is on [Vercel](https://vercel.com) ([easyauth-generator.vercel.app](https://easyauth-generator.vercel.app)).
 - CORS is enabled for:
   - `http://localhost:3000`
-  - `https://easyauth-generator.vercel.app`
+  - [https://easyauth-generator.vercel.app](https://easyauth-generator.vercel.app)
 - When using browser-based API tools, non-browser or proxy mode may be required due to CORS.
 
 Full request/response examples: [docs/API.md](docs/API.md)
