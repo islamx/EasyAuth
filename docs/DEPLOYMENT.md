@@ -4,9 +4,9 @@
 
 Before deploying to production, ensure you have:
 
-1. A **MongoDB instance** (MongoDB Atlas recommended for managed hosting)
-2. A **hosting platform** for the API (Railway, Render, Heroku, AWS, etc.)
-3. A **hosting platform** for the web app (Vercel, Netlify, AWS Amplify, etc.)
+1. A **MongoDB instance** — [MongoDB Atlas](https://cloud.mongodb.com/) (recommended) or self-hosted
+2. A **hosting platform** for the API — e.g. [Render](https://render.com), [Railway](https://railway.app), Heroku, AWS
+3. A **hosting platform** for the web app — e.g. [Vercel](https://vercel.com), Netlify, AWS Amplify
 4. **HTTPS/SSL certificates** (most platforms provide this automatically)
 
 ## Deployment Checklist
@@ -25,7 +25,7 @@ Save this value securely - you'll need it for the API environment variables.
 
 #### Option A: MongoDB Atlas (Recommended)
 
-1. Create a free cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+1. Create a free cluster at [MongoDB Cloud / Atlas](https://cloud.mongodb.com/)
 2. Set up database user credentials
 3. Whitelist your API server's IP addresses (or `0.0.0.0/0` for development)
 4. Copy the connection string (format: `mongodb+srv://username:password@cluster.mongodb.net/easyauth`)
@@ -39,7 +39,7 @@ Ensure your MongoDB instance is:
 
 ### 3. Deploy the API
 
-**Note:** Deploy only the API to Railway (or Docker/Render). The web app is deployed separately (e.g. Vercel); see section 4.
+**Note:** Deploy only the API to [Render](https://render.com), [Railway](https://railway.app), or Docker. The web app is deployed separately (e.g. [Vercel](https://vercel.com)); see section 4.
 
 #### Environment Variables (Required)
 
@@ -66,7 +66,7 @@ CORS_ORIGIN=https://yourdomain.com  # your frontend URL
   - **Root Directory**: Must be the **repository root** (leave blank or `.`). If you set root to `apps/api`, Nixpacks will not see the root `nixpacks.toml` and will run `npm i` → you will get `EUNSUPPORTEDPROTOCOL` / `Unsupported URL Type "workspace:"`.
   - **Builder**: Prefer the repo **Dockerfile** so the pnpm-based build is used (see `railpack.json`: `"provider": "dockerfile"`). In Railway: Service → Settings → set **Builder** to **Dockerfile** if available.
   - **If using Nixpacks**: With root at repo root, the root `nixpacks.toml` is used (pnpm install/build/start). Build: leave default or set to `pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`. Start: **must** set to `pnpm --filter @easyauth/api start:prod` (root has no `start` script).
-- **Render**: Create a new service, connect your GitHub repo, set environment variables. Use **repo root**. Build command must install devDependencies (Nest CLI is needed for `nest build`): use **`NODE_ENV=development pnpm install && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`**. Start: **`pnpm --filter @easyauth/api start:prod`**. (Render sets NODE_ENV=production at build time, so without NODE_ENV=development for install you get "nest: not found".)
+- **[Render](https://render.com)**: Create a new service, connect your GitHub repo, set environment variables. Use **repo root**. Build command must install devDependencies (Nest CLI is needed for `nest build`): use **`NODE_ENV=development pnpm install && pnpm --filter @easyauth/shared build && pnpm --filter @easyauth/api build`**. Start: **`pnpm --filter @easyauth/api start:prod`**. (Render sets NODE_ENV=production at build time, so without NODE_ENV=development for install you get "nest: not found".)
 - **Heroku**: Use the Node.js buildpack, set workspace root to `apps/api` if needed
 - **AWS/GCP**: Use Elastic Beanstalk, App Engine, or containerize with Docker
 
@@ -104,7 +104,7 @@ NEXT_PUBLIC_API_URL=https://your-api-domain.com/api
 
 #### Platform-Specific Notes
 
-- **Vercel (Recommended)**:
+- **[Vercel](https://vercel.com) (Recommended)**:
   1. In Vercel project settings, set **Root Directory** to **`apps/web`** (required so Vercel finds the `package.json` that has `next`).
   2. Leave **Build Command** and **Install Command** empty so `apps/web/vercel.json` is used: install `pnpm install`, build `pnpm --filter @easyauth/shared build && pnpm run build`.
   3. Add env var `NEXT_PUBLIC_API_URL=https://your-api-domain.com/api`.
@@ -140,8 +140,8 @@ After deployment, test the following:
 
 **Recommended for simplicity:**
 
-- **Web**: Vercel (free tier, automatic HTTPS, great Next.js support)
-- **API**: Railway (free trial, easy deployment, automatic HTTPS)
+- **Web**: [Vercel](https://vercel.com) (free tier, automatic HTTPS, great Next.js support)
+- **API**: [Render](https://render.com) or [Railway](https://railway.app) (free tiers, automatic HTTPS)
 - **Database**: MongoDB Atlas (free tier, managed, automatic backups)
 
 **Cost**: Free tier available for all three services (suitable for development and small production workloads).

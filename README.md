@@ -86,7 +86,7 @@ This starts both the API (port 4000) and web app (port 3000) concurrently.
 
 ## Live API & Testing
 
-**Base API URL:** `https://easyauth-hixc.onrender.com`
+**Base API URL:** [https://easyauth-hixc.onrender.com](https://easyauth-hixc.onrender.com) (API hosted on [Render](https://render.com))
 
 ### Health check
 
@@ -108,7 +108,7 @@ curl -s https://easyauth-hixc.onrender.com/api/health
 
 ### Notes
 
-- The API is deployed on **Render**.
+- The API is deployed on [Render](https://render.com); the web app is on [Vercel](https://vercel.com) ([easyauth-generator.vercel.app](https://easyauth-generator.vercel.app)).
 - CORS is enabled for:
   - `http://localhost:3000`
   - `https://easyauth-generator.vercel.app`
@@ -177,7 +177,13 @@ See `apps/api/.env.example` and `apps/web/.env.example` for required configurati
 
 ## Production Deployment
 
-Deploy the API (Railway, Render, etc.) and web app (Vercel recommended) with environment variables from `.env.example` files. Ensure HTTPS is enabled and `CORS_ORIGIN` matches your frontend URL exactly.
+This project’s production stack uses:
+
+- **[MongoDB Atlas](https://cloud.mongodb.com/)** — managed database
+- **[Render](https://render.com)** — API hosting (or Railway, Heroku, etc.)
+- **[Vercel](https://vercel.com)** — web app hosting (recommended for Next.js)
+
+Deploy with environment variables from `.env.example` files. Ensure HTTPS is enabled and `CORS_ORIGIN` matches your frontend URL exactly.
 
 Full deployment checklist, platform notes, and troubleshooting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
