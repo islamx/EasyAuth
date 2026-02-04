@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -6,7 +6,6 @@ import { LoggerModule } from 'nestjs-pino';
 import * as Joi from 'joi';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { AppController } from './app.controller';
 
 @Module({
@@ -66,8 +65,4 @@ import { AppController } from './app.controller';
   ],
   controllers: [AppController],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestIdMiddleware).forRoutes('*path');
-  }
-}
+export class AppModule {}

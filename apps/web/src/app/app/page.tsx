@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { type User } from '@easyauth/shared';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { api } from '@/lib/api';
+import { api, clearAuthToken } from '@/lib/api';
 
 export default function AppPage() {
   const router = useRouter();
@@ -32,6 +32,7 @@ export default function AppPage() {
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
+      clearAuthToken();
       await api('/auth/logout', { method: 'POST' });
       router.push('/signin');
     } catch (error) {

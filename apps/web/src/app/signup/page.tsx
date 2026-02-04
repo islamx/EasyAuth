@@ -8,7 +8,7 @@ import { signupSchema, type SignupInput, type AuthResponse, type ErrorResponse }
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
 import { Button } from '@/components/ui/Button';
-import { api } from '@/lib/api';
+import { api, setAuthToken } from '@/lib/api';
 import Link from 'next/link';
 
 export default function SignupPage() {
@@ -33,10 +33,11 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupInput) => {
     try {
       setServerError('');
-      await api<AuthResponse>('/auth/signup', {
+      const res = await api<AuthResponse>('/auth/signup', {
         method: 'POST',
         body: JSON.stringify(data),
       });
+      if (res.token) setAuthToken(res.token);
       router.push('/app');
     } catch (error) {
       const err = error as ErrorResponse;

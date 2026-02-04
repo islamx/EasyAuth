@@ -5,14 +5,22 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from 'nestjs-pino';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import { Request, Response, NextFunction } from 'express';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   // Logger
   app.useLogger(app.get(Logger));
+
+  // Request ID middleware (applied globally to avoid path-to-regexp "/api/*" warning with forRoutes)
+  const requestIdMiddleware = new RequestIdMiddleware();
+  app.use((req: Request, res: Response, next: NextFunction) =>
+    requestIdMiddleware.use(req, res, next),
+  );
 
   const configService = app.get(ConfigService);
   const nodeEnv = configService.get('NODE_ENV');

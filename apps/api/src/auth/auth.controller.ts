@@ -47,7 +47,7 @@ export class AuthController {
 
     response.cookie('easyauth_token', token, this.cookieOptions(req, 900000));
 
-    return { user };
+    return { token, user };
   }
 
   @Post('signin')
@@ -65,7 +65,7 @@ export class AuthController {
 
     response.cookie('easyauth_token', token, this.cookieOptions(req, 900000));
 
-    return { user };
+    return { token, user };
   }
 
   @Post('logout')

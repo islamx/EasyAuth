@@ -9,6 +9,8 @@ export interface User {
 }
 export interface AuthResponse {
     user: User;
+    /** JWT returned by signin/signup; client can store and send via Authorization header (e.g. cross-origin when cookie is not sent). */
+    token?: string;
 }
 export interface ErrorResponse {
     statusCode: number;
